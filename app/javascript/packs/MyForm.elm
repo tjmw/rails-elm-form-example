@@ -1,7 +1,7 @@
-module Main exposing (..)
+module MyForm exposing (..)
 
-import Html exposing (Html, h1, text)
-import Html.Attributes exposing (style)
+import Html exposing (Html, form, input, label, text)
+import Html.Attributes exposing (action, for, id, method, name, type_)
 
 -- MODEL
 
@@ -19,10 +19,12 @@ init =
 
 view : Model -> Html Message
 view model =
-  -- The inline style is being used for example purposes in order to keep this example simple and
-  -- avoid loading additional resources. Use a proper stylesheet when building your own app.
-  h1 [style [("display", "flex"), ("justify-content", "center")]]
-     [text "Hello Elm!"]
+  form [ action "/users", method "post"]
+      [ label [ for "name" ] [ text "name" ]
+      , input [ type_ "text", name "name", id "name" ] []
+      , input [ type_ "submit" ] []
+      ]
+
 
 -- MESSAGE
 
