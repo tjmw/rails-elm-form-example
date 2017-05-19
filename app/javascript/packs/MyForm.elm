@@ -1,19 +1,27 @@
 module MyForm exposing (..)
 
 import Html exposing (Html, form, input, label, text)
-import Html.Attributes exposing (action, for, id, method, name, type_)
+import Html.Attributes exposing (action, for, id, method, name, type_, value)
 
 -- MODEL
 
 type alias Model =
   {
+    csrfToken : String
   }
+
+-- FLAGS
+
+type alias Flags =
+    {
+      csrfToken : String
+    }
 
 -- INIT
 
-init : (Model, Cmd Message)
-init =
-  (Model, Cmd.none)
+init : Flags -> (Model, Cmd Message)
+init flags =
+  (Model flags.csrfToken, Cmd.none)
 
 -- VIEW
 
@@ -22,6 +30,7 @@ view model =
   form [ action "/users", method "post"]
       [ label [ for "name" ] [ text "name" ]
       , input [ type_ "text", name "name", id "name" ] []
+      , input [ type_ "hidden", name "authenticity_token", value model.csrfToken ] []
       , input [ type_ "submit" ] []
       ]
 
@@ -45,9 +54,9 @@ subscriptions model =
 
 -- MAIN
 
-main : Program Never Model Message
+main : Program Flags Model Message
 main =
-  Html.program
+  Html.programWithFlags
     {
       init = init,
       view = view,
